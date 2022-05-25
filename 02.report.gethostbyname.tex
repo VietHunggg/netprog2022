@@ -1,0 +1,93 @@
+# Full name: Nguyen Viet Hung
+
+# ID: BI11-103 
+
+##                                                                Assignment
+
+## 1. Deploy practical work to VPS:
+
+- Access to server through **sftp** using **ssh-key**: 
+
+  ```md
+  viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
+  ```
+
+  Output:
+
+  ```md
+  viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
+  Connected to 35.222.105.161.
+  sftp>
+  ```
+
+- Put practical work file to server:
+
+  ```md
+  viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
+  Connected to 35.222.105.161.
+  sftp> lcd ~/Desktop/B2NetwokPro/netprog2022
+  sftp> put prac2.c
+  Uploading prac2.c to /home/hungnv_bi11_103_st_usth_edu_vn/prac2.c
+  prac2.c                                       100%  601     2.7KB/s   00:00    
+  sftp> 
+  ```
+
+  Output:
+
+  ```md
+  hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ls
+  prac2.c
+  ```
+
+## 2. Run practical work on server and own PC:
+
+- Run practical work on server:
+
+  ```md
+  hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ls
+  a.out  prac2.c
+  hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ./a.out usth.edu.vn
+  usth.edu.vn IPv4: 119.17.215.232
+  ```
+
+- Run practical work on own computer:
+
+  ```md
+  viethung@viethung-thinkpad:~/Desktop/B2NetwokPro/netprog2022$ ./a.out usth.edu.vn
+  usth.edu.vn IPv4: 119.17.215.232
+  ```
+
+## 3. Compare result:
+
+- The output result is the same on both cases: **119.17.215.232** for domain **usth.edu.vn** 
+
+## 4. Explain:
+
+- Structure **struct in_addr**: Converts from struct form to string of dots-and-numbers form and vice-versa such as IP addr in cmd
+
+- Function **gethostbyname()**: This **DNS** function belongs to **hostent** structure and that retrieves host information corresponding to a host name from database such as DNS. If the host name is invalid or not found, exit with error message.
+
+  - ```md
+    if (host_info == NULL) {
+            perror("gethostbyname");
+            exit(1);
+        }
+    ```
+
+  - To use **gethostbyname()**, we must include these library:
+
+    ```md
+    #include  <netdb.h>
+    #include <sys/socket.h>
+    ```
+
+- Function **inet_ntoa()**: This function belongs to **in_addr** structure. **"inet_toa()"** converts a network address in **in_addr** to dots-and-numbers string such as: IPv4: 10.20.10.255. It returns non-zero if the address or domain is valid and returns zero if invalid one.
+
+  - To use **inet_ntoa()**, we must include these library:
+
+    ```md
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <arpa/inet.h>
+    ```
+
