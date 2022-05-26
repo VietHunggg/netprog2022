@@ -1,93 +1,191 @@
-# Full name: Nguyen Viet Hung
+\documentclass[12pt]{article}
 
-# ID: BI11-103 
+\usepackage{geometry}
+\usepackage{parskip}
+\usepackage{tikz}
 
-##                                                                Assignment
+% This style is used to create block diagrams, you'll find it useful since many of your figures would be of that form, I'll try add more styles in the future :)
+\usetikzlibrary{trees,positioning,fit,calc}
+\tikzset{block/.style = {draw, fill=blue!20, rectangle,
+                         minimum height=3em, minimum width=4em},
+        input/.style = {coordinate},
+        output/.style = {coordinate}
+}
 
-## 1. Deploy practical work to VPS:
+\usepackage[section]{minted}
+\usepackage{xcolor}
+\usemintedstyle{porland}
 
-- Access to server through **sftp** using **ssh-key**: 
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
 
-  ```md
-  viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
-  ```
+\usepackage{tocbasic}
+\setuptoc{lol}{levelup}
 
-  Output:
+% \usepackage{indentfirst}
+\geometry{a4paper, margin=1in}
 
-  ```md
-  viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
-  Connected to 35.222.105.161.
-  sftp>
-  ```
+%----------EDIT COVER INFO HERE -----------------%
 
-- Put practical work file to server:
+\def \LOGOPATH {logo/logo-usth.png}
+\def \DEPARTEMENT {Department of Information and Communication Technology}
+\def \COURSENUM {ENCS101}
+\def \COURSENAME {Network Programming}
+\def \REPORTTITLE {C Program to resolve domain names}
+\def \STUDENTNAME {NGUYEN Viet Hung}
+\def \STUDENTID {BI11-103}
+\def \INSTRUCTOR {TRAN Giang Son}
 
-  ```md
-  viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
-  Connected to 35.222.105.161.
-  sftp> lcd ~/Desktop/B2NetwokPro/netprog2022
-  sftp> put prac2.c
-  Uploading prac2.c to /home/hungnv_bi11_103_st_usth_edu_vn/prac2.c
-  prac2.c                                       100%  601     2.7KB/s   00:00    
-  sftp> 
-  ```
+%------------------------------------------------%
 
-  Output:
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0em}
 
-  ```md
-  hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ls
-  prac2.c
-  ```
+\begin{document}
 
-## 2. Run practical work on server and own PC:
+\pagenumbering{Roman}
 
-- Run practical work on server:
+\begin{titlepage}
+    \vfill
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{\LOGOPATH} \\
+        \hfill \\
+        \Large{\DEPARTEMENT} \\
+        \Large{\COURSENAME} \\
+        \vfill
+        \textbf{\LARGE{\REPORTTITLE}}
+    \end{center}
+    \vfill
+    \begin{flushleft}
+        \Large{\textbf{Prepared by:} \STUDENTNAME\;-\;\STUDENTID} \\
+        \Large{\textbf{Instructor:} \INSTRUCTOR} \\
+        \Large{\textbf{Date:} \today}
+    \end{flushleft}
+    \vfill
+\end{titlepage}
 
-  ```md
-  hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ls
-  a.out  prac2.c
-  hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ./a.out usth.edu.vn
-  usth.edu.vn IPv4: 119.17.215.232
-  ```
+%--------------ABSTRACT ------------------------%
+{
+\section*{\centering Abstract} 
+This document specifies a method and procedures to implement a DNS resolver program in C language. Specifically, two functions C functions gethostbyname() and inet\_ntop() are used to resolve domain name to IP addresses and present the result.
+\clearpage
+}
 
-- Run practical work on own computer:
+%-----------------------------------------------%
 
-  ```md
-  viethung@viethung-thinkpad:~/Desktop/B2NetwokPro/netprog2022$ ./a.out usth.edu.vn
-  usth.edu.vn IPv4: 119.17.215.232
-  ```
+\tableofcontents
+\clearpage
 
-## 3. Compare result:
+\setlength{\parskip}{\baselineskip}%
 
-- The output result is the same on both cases: **119.17.215.232** for domain **usth.edu.vn** 
+\pagenumbering{arabic}
 
-## 4. Explain:
+%--------------INTRODUCTION ---------------------%
 
-- Structure **struct in_addr**: Converts from struct form to string of dots-and-numbers form and vice-versa such as IP addr in cmd
+\section{Deploy practical work to VPS:}
 
-- Function **gethostbyname()**: This **DNS** function belongs to **hostent** structure and that retrieves host information corresponding to a host name from database such as DNS. If the host name is invalid or not found, exit with error message.
+\subsection{Access to server throught sptp using ssh-key:}
 
-  - ```md
-    if (host_info == NULL) {
-            perror("gethostbyname");
-            exit(1);
-        }
-    ```
+\begin{itemize}
+    \item Domain name comes from user input:
+    \begin{verbatim}
+viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud 
+hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
+    \end{verbatim}
+    \item Output:
+    \begin{verbatim}
+viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud 
+hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
+Connected to 35.222.105.161.
+sftp>
+    \end{verbatim}
+    \item Put practical work to server:
+    \begin{verbatim}
+viethung@viethung-thinkpad:~$ sftp -i .ssh/keyggcloud 
+hungnv_bi11_103_st_usth_edu_vn@35.222.105.161
+Connected to 35.222.105.161.
+sftp> lcd ~/Desktop/B2NetwokPro/netprog2022
+sftp> put prac2.c
+Uploading prac2.c to /home/hungnv_bi11_103_st_usth_edu_vn/prac2.c
+prac2.c                                       100%  601     2.7KB/s   00:00    
+sftp> 
+    \end{verbatim}
+    \item Output:
+    \begin{verbatim}
+hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ls
+prac2.c
+    \end{verbatim}
+\end{itemize}
 
-  - To use **gethostbyname()**, we must include these library:
+\section{Run practical work on server and own PC:}
 
-    ```md
-    #include  <netdb.h>
-    #include <sys/socket.h>
-    ```
+\subsection{Run practical work on server:}
+\begin{verbatim}
+hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ls
+a.out  prac2.c
+hungnv_bi11_103_st_usth_edu_vn@instance-1:~$ ./a.out usth.edu.vn
+usth.edu.vn IPv4: 119.17.215.232
+\end{verbatim}
 
-- Function **inet_ntoa()**: This function belongs to **in_addr** structure. **"inet_toa()"** converts a network address in **in_addr** to dots-and-numbers string such as: IPv4: 10.20.10.255. It returns non-zero if the address or domain is valid and returns zero if invalid one.
+\subsection{Run practical work on own computer:}
+\begin{verbatim}
+viethung@viethung-thinkpad:~/Desktop/B2NetwokPro/netprog2022$ ./a.out usth.edu.vn
+usth.edu.vn IPv4: 119.17.215.232
+\end{verbatim}
 
-  - To use **inet_ntoa()**, we must include these library:
+\section{Comapre result:}
+The output result is the same on both cases:\Verb"119.17.215.232" for domain \Verb"usth.edu.vn"
 
-    ```md
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-    #include <arpa/inet.h>
-    ```
+\section{Explain:}
+\subsection{Structure:}
+\begin{verbatim}
+Structure **struct in_addr**: Converts from struct form to string 
+of dots-and-numbers form and vice-versa such as IP addr in cmd
+\end{verbatim}
 
+\subsection{Function gethostbyname():}
+\begin{verbatim}
+Function **gethostbyname()**: This **DNS** function belongs to **hostent** 
+structure and that retrieves host information correspondingto a host name 
+from database such as DNS. If the host name is invalid or not found, exit 
+with error message:
+
+if (host_info == NULL) {
+        perror("gethostbyname");
+        exit(1);
+    }
+
+To use gethostbyname(), we must include these library:
+
+#include  <netdb.h>
+#include <sys/socket.h>
+\end{verbatim}
+
+\subsection{Function gethostbyname():}
+\begin{verbatim}
+Function **inet_ntoa()**: This function belongs to **in_addr** structure.
+**"inet_toa()"** converts a network address in **in_addr** to 
+dots-and-numbers string such as: IPv4: 10.20.10.255. It returns non-zero 
+if the address or domain is valid and returns zero if invalid one.
+
+To use **inet_ntoa()**, we must include these library:
+
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+\end{verbatim}
+
+\subsection{Trace all IP for a domain:}
+\begin{verbatim}
+To list all the IP addr of a domain, we have to use loop to examine all the address value in address list:
+
+for (int i = 0; host_info->h_addr_list[i] != NULL; i++) {
+        address = (struct in_addr *)(host_info->h_addr_list[i]);
+        printf("%s IPv4: %s\n", input, inet_ntoa(*address));
+    }
+\end{verbatim}
+
+\clearpage
+
+
+\end{document}
