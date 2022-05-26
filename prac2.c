@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
     struct hostent *host_info; 
     struct in_addr *address;
 
-    char input[20];
+    char input[200];
     //copy string value from keyboard to variable to process
     strcpy(input, argv[1]);
     
@@ -22,6 +22,9 @@ int main(int argc, char *argv[]){
         perror("gethostbyname");
         exit(1);
     }
-    address = (struct in_addr *)(host_info->h_addr);
-    printf("%s IPv4: %s\n", input, inet_ntoa(*address));
+
+    for (int i = 0; host_info->h_addr_list[i] != NULL; i++) {
+        address = (struct in_addr *)(host_info->h_addr_list[i]);
+        printf("%s IPv4: %s\n", input, inet_ntoa(*address));
+    }
 }
