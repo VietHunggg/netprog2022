@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
         return 1;
     }
     if ((h = gethostbyname("127.0.0.1")) == NULL) {
-        printf("Unknow host\n");
+        printf("Unknown host\n");
         return 1;
     }
     memset(&saddr, 0, sizeof(saddr));
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
     saddr.sin_port = htons(PORT);
     
     if(connect(sockfd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0){
-        printf("connect failed\n");
+        printf("Connect failed\n");
     }
     
     return 0;
