@@ -39,10 +39,15 @@ int main(int argc, char *argv[]){
         printf("LISTENING port: %d\n", PORT);
     }
 
-    while (1) {
+    printf("Waitting for connection\n");
+    while (1){
+        printf("Connecting\n");
         client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &addr_size);
-        printf("CONNECTED !");
+        printf("CONNECTED !\n");
+        close(client_fd);
     }
+    
+    close(server_fd);
     
     return 0;
 }
