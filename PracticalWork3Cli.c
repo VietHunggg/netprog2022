@@ -32,5 +32,11 @@ int main(int argc, char *argv[]){
         printf("Connect failed\n");
     }
     
+    char sendbuffer[1024];
+    char rcvbuffer[1024];
+    printf("Input something:\n");
+    scanf("%s", sendbuffer);
+    send(sockfd, sendbuffer, sizeof(sendbuffer),0);
+    
     return 0;
 }

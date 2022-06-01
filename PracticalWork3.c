@@ -40,14 +40,17 @@ int main(int argc, char *argv[]){
     }
 
     printf("Waitting for connection\n");
-    while (1){
-        printf("Connecting\n");
-        client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &addr_size);
-        printf("CONNECTED !\n");
-        close(client_fd);
-    }
     
-    close(server_fd);
+    printf("Connecting\n");
+    client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &addr_size);
+    printf("CONNECTED !\n");
+        //close(client_fd);
+    char rcvbuffer[1024];
+    recv(client_fd, rcvbuffer, sizeof(rcvbuffer), 0);
+    printf("%s", rcvbuffer);
+
+    
+    //close(server_fd);
     
     return 0;
 }
