@@ -46,8 +46,14 @@ int main(int argc, char *argv[]){
     printf("CONNECTED !\n");
         //close(client_fd);
     char rcvbuffer[1024];
+    char sendbuffer[1024];
     recv(client_fd, rcvbuffer, sizeof(rcvbuffer), 0);
     printf("%s", rcvbuffer);
+    printf("Input something:\n");
+    scanf("%s", sendbuffer);
+    send(client_fd, sendbuffer, sizeof(sendbuffer),0);
+
+
 
     
     //close(server_fd);

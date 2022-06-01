@@ -37,6 +37,7 @@ int main(int argc, char *argv[]){
     printf("Input something:\n");
     scanf("%s", sendbuffer);
     send(sockfd, sendbuffer, sizeof(sendbuffer),0);
+    recv(sockfd, rcvbuffer, sizeof(rcvbuffer),0);
     
     return 0;
 }
