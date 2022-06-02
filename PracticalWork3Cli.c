@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
         printf("Error creating socket\n");
         return 1;
     }
-    if ((h = gethostbyname("127.0.0.1")) == NULL) {
+    if ((h = gethostbyname("35.222.105.161")) == NULL) {
         printf("Unknown host\n");
         return 1;
     }
@@ -38,6 +38,6 @@ int main(int argc, char *argv[]){
     scanf("%s", sendbuffer);
     send(sockfd, sendbuffer, sizeof(sendbuffer),0);
     recv(sockfd, rcvbuffer, sizeof(rcvbuffer),0);
-    
+    printf("%s", rcvbuffer);
     return 0;
 }
