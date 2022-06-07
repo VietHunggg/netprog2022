@@ -63,17 +63,17 @@ int main(int argc, char *argv[]){
         //if (fcntl(client_fd, F_SETFL,fl | O_NONBLOCK) < 0){
         //    perror("fcntl");
         //}
-
-        char sendbuffer[1024];
-        char rcvbuffer[1024];
-
-        while (1) {
+        if (client_fd > 0){
+            printf("CONNECTED\n");
+            char sendbuffer[1024];
+            char rcvbuffer[1024];
+            
             do {
                 recv(client_fd, rcvbuffer, sizeof(rcvbuffer), 0);
                 printf("%s", rcvbuffer);
             } while (rcvbuffer[strlen(rcvbuffer) - 1] != '\n');
             bzero(rcvbuffer, sizeof(rcvbuffer));
-
+    
             printf("\nInput something:\n");
             do {
                 fgets(sendbuffer, sizeof(sendbuffer), stdin);
@@ -81,6 +81,7 @@ int main(int argc, char *argv[]){
             } while (sendbuffer[strlen(sendbuffer) - 1] != '\n');
             bzero(sendbuffer, sizeof(sendbuffer));
         }
+        
         close(client_fd);
     }
 }
